@@ -1,5 +1,5 @@
 <template>
-  <h1>Peek-a-Vue</h1>
+  <img src="/images/peek-a-vue-title.png" alt="peek-a-vue" class="title">
   <section class="game-board">
     <CardForEach
       v-for="(card, index) in cardList"
@@ -12,7 +12,9 @@
     />
   </section>
   <h2>{{ status }}</h2>
-  <button @click="restartGame">Restart Game</button>
+  <button @click="restartGame" class="button">
+  <img src="/images/restart.svg" alt="Restart Icon"> Restart Game
+  </button>
 </template>
 
 <script>
@@ -148,7 +150,20 @@ h1{
   color: #fff;
   padding-top: 60px;
 }
+button{
+  background-color: orange;
+  color: white;
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-weight: bold;
+}
 
+.button img{
+  padding-right: 5px;
+}
 .game-board {
   display: grid;
   grid-template-columns: repeat(4,100px);
@@ -156,5 +171,9 @@ h1{
   grid-column-gap: 24px;
   grid-row-gap: 24px;
   justify-content: center;
+}
+
+title{
+  padding-bottom: 30px;
 }
 </style>
