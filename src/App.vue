@@ -56,7 +56,7 @@ export default {
       })
     }
 
-    const cardItems = [1,2,3,4,5,6,7,8]
+    const cardItems = ['bat','candy','cauldron','cupcake','ghost','moon','pumpkin','witch-hat']
     cardItems.forEach(item=>{
       cardList.value.push({
         value: item,
@@ -83,7 +83,11 @@ export default {
     const flipCard = (payload) => {
       cardList.value[payload.position].visible = true;
       if (userSelection.value[0]) {
-        userSelection.value[1] = payload;
+        if(userSelection.value[0].position === payload.position && userSelection.value[0].faceValue === payload.faceValue){
+          return;
+        }else{
+          userSelection.value[1] = payload;
+        }
       } else {
         userSelection.value[0] = payload;
       }
@@ -101,8 +105,8 @@ export default {
             cardList.value[cardTwo.position].matched = true;
           }else{
             setTimeout(()=>{
-              cardList.value[cardOne.position].visible = false;
-              cardList.value[cardTwo.position].visible = false;
+              if(!cardList.value[cardOne.position].matched) cardList.value[cardOne.position].visible = false;
+              if(!cardList.value[cardTwo.position].matched) cardList.value[cardTwo.position].visible = false;
             },2000)
           }
           userSelection.value.length = 0;
@@ -124,23 +128,33 @@ export default {
 </script>
 
 <style>
+html,body{
+  margin:0;
+  padding: 0;
+}
+h1{
+  margin-top: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  background-image: url('/public/images/page-bg.png');
+  background-color: #00070c;
+  height: 100vh;
+  color: #fff;
+  padding-top: 60px;
 }
-.card {
-  border: 5px solid #ccc;
-}
+
 .game-board {
   display: grid;
-  grid-template-columns: 100px 100px 100px 100px;
-  grid-template-rows: 100px 100px 100px 100px;
-  grid-column-gap: 30px;
-  grid-row-gap: 30px;
+  grid-template-columns: repeat(4,100px);
+  grid-template-rows: repeat(4,100px);
+  grid-column-gap: 24px;
+  grid-row-gap: 24px;
   justify-content: center;
 }
 </style>
