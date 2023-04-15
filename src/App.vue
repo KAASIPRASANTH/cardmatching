@@ -12,9 +12,11 @@
     />
   </section>
   <h2>{{ status }}</h2>
+  <button @click="restartGame">Restart Game</button>
 </template>
 
 <script>
+import _ from 'lodash';
 import { computed,ref, watch } from "vue";
 import CardForEach from "./components/CardForEach";
 export default {
@@ -25,6 +27,7 @@ export default {
   setup() {
     const cardList = ref([]);
     const userSelection = ref([]);
+
     const status = computed(()=>{
       if(remainingPairs.value === 0){
         return 'Palyer wins';
@@ -37,14 +40,46 @@ export default {
 
       return remainingCards/2;
     }) 
-    for (let i = 0; i < 16; i++) {
+
+    const shuffleCards = ()=>{
+      cardList.value = _.shuffle(cardList.value)
+    }
+    const restartGame = ()=>{
+      shuffleCards()
+      cardList.value = cardList.value.map((card,index) => {
+        return{
+          ...card,
+          matched:false,
+          position:index,
+          visible:false
+        }
+      })
+    }
+
+    const cardItems = [1,2,3,4,5,6,7,8]
+    cardItems.forEach(item=>{
       cardList.value.push({
-        value: 10,
-        visible: false,
-        position: i,
+        value: item,
+        visible:false,
+        position: null,
         matched:false
       });
-    }
+      cardList.value.push({
+        value: item,
+        visible:false,
+        position: null,
+        matched:false
+      });
+    })
+
+    cardList.value = cardList.value.map((card,index)=>{
+      return{
+        ...card,
+        position:index
+      }
+    })
+
+
     const flipCard = (payload) => {
       cardList.value[payload.position].visible = true;
       if (userSelection.value[0]) {
@@ -62,15 +97,13 @@ export default {
           const cardTwo = currValue[1];
 
           if(cardOne.faceValue === cardTwo.faceValue){
-            status.value = 'Matched!'
-
             cardList.value[cardOne.position].matched = true;
             cardList.value[cardTwo.position].matched = true;
           }else{
-            status.value = 'Mismatch!'
-
-            cardList.value[cardOne.position].visible = false;
-            cardList.value[cardTwo.position].visible = false;
+            setTimeout(()=>{
+              cardList.value[cardOne.position].visible = false;
+              cardList.value[cardTwo.position].visible = false;
+            },2000)
           }
           userSelection.value.length = 0;
         }
@@ -82,7 +115,9 @@ export default {
       cardList,
       flipCard,
       userSelection,
-      status
+      status,
+      shuffleCards,
+      restartGame
     };
   },
 };
