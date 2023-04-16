@@ -1,4 +1,4 @@
-# cardmatching
+# cardmatching  Game
 
 ## Project setup
 ```
